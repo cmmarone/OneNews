@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
+using OneNews.Data;
 using OneNews.WebAPI.Models;
 
 namespace OneNews.WebAPI
