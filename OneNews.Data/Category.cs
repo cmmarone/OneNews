@@ -10,7 +10,7 @@ namespace OneNews.Data
     public class Category
     {
         [Key]
-        public int CategotyId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }
