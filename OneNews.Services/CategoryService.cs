@@ -12,6 +12,7 @@ namespace OneNews.Services
     {
         private readonly ApplicationDbContext _context = new ApplicationDbContext();
 
+     
 
         public bool CreateCategory(CategoryCreate model)
         {
@@ -48,7 +49,7 @@ namespace OneNews.Services
             };
         }
 
-        public bool UpdateCatigory(CategoryEdit model)
+        public bool UpdateCategory(CategoryEdit model)
         {
             var entity = _context
                 .Categories
@@ -58,7 +59,7 @@ namespace OneNews.Services
             return _context.SaveChanges() == 1;
         }
 
-        public bool DeleteCustomer(int id)
+        public bool DeleteCategory(int id)
         {
             var entity = _context
                 .Categories
