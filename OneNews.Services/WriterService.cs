@@ -58,11 +58,16 @@ namespace OneNews.Services
         }
         public bool UpdateWriter(WriterEdit model)
         {
+
             var entity =
                 _context.Writers
                 .Single(e => e.Id == model.Id);
             entity.Name = model.Name;
             entity.Id = model.Id;
+
+
+
+
 
             return _context.SaveChanges() == 1;
         }
