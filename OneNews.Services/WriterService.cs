@@ -21,11 +21,11 @@ namespace OneNews.Services
         }
         public bool CreateWriter(WriterCreate model)
         {
-            
-                new Writer()
-                {
-                    
-                };
+
+            new Writer()
+            {
+
+            };
 
 
         }
