@@ -23,7 +23,6 @@ namespace OneNews.Services
                 Location = model.Location,
                 TimeOfPublication = DateTimeOffset.Now
             };
-
             _context.Stories.Add(storyEntity);
             return _context.SaveChanges() == 1;
         }
