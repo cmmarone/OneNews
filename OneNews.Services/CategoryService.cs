@@ -45,7 +45,8 @@ namespace OneNews.Services
             return new CategoryDetail
             {
                 Id = entity.Id,
-                Name = entity.Name
+                Name = entity.Name,
+                Stories = entity.Stories
             };
         }
 
