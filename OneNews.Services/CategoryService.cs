@@ -46,8 +46,26 @@ namespace OneNews.Services
             {
                 Id = entity.Id,
                 Name = entity.Name,
-                Stories = entity.Stories
+           
             };
+
+            
+        }
+
+        public ICollection<StoryListItem> ConvertStoryBaseModeltoListItem(ICollection<Story> stories)
+        {
+            var listOfItems = new List<StoryListItem>();
+            foreach(Story story in stories)
+            {
+                var listItem = new StoryListItem();
+                listItem.Id = story.Id;
+                listItem.Title = story.Title;
+                listItem.Location = story.Location;
+                listItem.TimeOfPublication = story.TimeOfPublication;
+                listOfItems.Add(listItem);
+              
+            }
+            return listOfItems;
         }
 
         public bool UpdateCategory(CategoryEdit model)
