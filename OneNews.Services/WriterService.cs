@@ -14,12 +14,12 @@ namespace OneNews.Services
         public bool CreateWriter(WriterCreate writer)
         {
             var entity = new Writer
-          
+
             {
                 Name = writer.Name
             };
 
-          
+
 
             _context.Writers.Add(entity);
             return _context.SaveChanges() == 1;
@@ -27,22 +27,23 @@ namespace OneNews.Services
         }
         public IEnumerable<WriterListItem> GetWriters()
         {
-                var query =
-                _context.Writers.Select(e =>
-                        
-                            new WriterListItem
-                            {
-                                Id = e.Id,
-                                Name = e.Name,
+            var query =
+            _context.Writers.Select(e =>
 
-                            }
-                    );
+                        new WriterListItem
+                        {
+                            Id = e.Id,
+                            Name = e.Name,
+
+                        }
+                );
 
             return query.ToArray();
 
         }
 
         public WriterDetail GetWriterById(int id)
+
         {
             var entity =
             _context.Writers
@@ -53,9 +54,28 @@ namespace OneNews.Services
              {
                  Id = entity.Id,
                  Name = entity.Name,
-                 Stories = entity.Stories
+                 
+
+
              };
         }
+        public ICollection<StoryListItem> ConvertStoryBaseModelToListItem(ICollection<Story> stories)
+        {
+            var listOfItems = new List<StoryListItem>();
+            foreach (Story story in stories)
+            {
+               var listItem = new StoryListItem();
+               listItem.Id = story.Id;
+               listItem.Title = story.Title;
+               listItem.Location = story.Location;
+               listItem.TimeOfPublication = story.TimeOfPublication;
+               listOfItems.Add(listItem);
+               
+            }
+            return listOfItems;
+        }
+
+
         public bool UpdateWriter(WriterEdit model)
         {
 
