@@ -11,6 +11,7 @@ namespace OneNews.Services
     public class WriterService
     {
         private readonly ApplicationDbContext _context = new ApplicationDbContext();
+        
         public bool CreateWriter(WriterCreate writer)
         {
             var entity = new Writer
@@ -62,13 +63,14 @@ namespace OneNews.Services
         public ICollection<StoryListItem> ConvertStoryBaseModelToListItem(ICollection<Story> stories)
         {
             var listOfItems = new List<StoryListItem>();
+            var serviceStory = new StoryService();
             foreach (Story story in stories)
             {
                var listItem = new StoryListItem();
                listItem.Id = story.Id;
                listItem.Title = story.Title;
                listItem.Location = story.Location;
-               listItem.TimeOfPublication = story.TimeOfPublication;
+               listItem.DateTimeDisplay = serviceStory.DisplayDateTime(story.TimeOfPublication);
                listOfItems.Add(listItem);
                
             }
