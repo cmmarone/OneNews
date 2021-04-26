@@ -13,6 +13,6 @@ namespace OneNews.Models
 
         public string Name { get; set; }
 
-        public virtual ICollection<StoryListItem> Stories { get; set; }
+        public virtual ICollection<StoryListItemForCategory> Stories { get; set; }
     }
 }
