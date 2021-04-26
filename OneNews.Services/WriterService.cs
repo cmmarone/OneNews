@@ -55,22 +55,22 @@ namespace OneNews.Services
              {
                  Id = entity.Id,
                  Name = entity.Name,
-                 
-
-
+                 Stories = ConvertStoryToListItemForWriter(entity.Stories)
              };
         }
-        public ICollection<StoryListItem> ConvertStoryBaseModelToListItem(ICollection<Story> stories)
+        public ICollection<StoryListItemForWriter> ConvertStoryToListItemForWriter(ICollection<Story> stories)
         {
-            var listOfItems = new List<StoryListItem>();
+            var listOfItems = new List<StoryListItemForWriter>();
             var serviceStory = new StoryService();
             foreach (Story story in stories)
             {
-               var listItem = new StoryListItem();
+               var listItem = new StoryListItemForWriter();
                listItem.Id = story.Id;
                listItem.Title = story.Title;
                listItem.Location = story.Location;
                listItem.DateTimeDisplay = serviceStory.DisplayDateTime(story.TimeOfPublication);
+               listItem.CategoryName = (_context.Categories.Single(c => c.Id == story.CategoryId)).Name;
+                    
                listOfItems.Add(listItem);
                
             }
