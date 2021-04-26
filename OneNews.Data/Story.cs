@@ -25,16 +25,12 @@ namespace OneNews.Data
 
 		[Required]
 		public string Title { get; set; }
-
 		[Required]
 		public string Body { get; set; }
-
 		[Required]
 		public string Location { get; set; }
-
 		[Required]
 		public DateTimeOffset TimeOfPublication { get; set; }
-
 		public Guid AuthorId { get; set; }
 	}
 }

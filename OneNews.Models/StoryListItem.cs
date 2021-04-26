@@ -9,15 +9,28 @@ namespace OneNews.Models
     public class StoryListItem
     {
 		public int Id { get; set; }
-
 		public string CategoryName { get; set; }
-
 		public string WriterName { get; set; }
-
 		public string Title { get; set; }
-
 		public string Location { get; set; }
+        public string DateTimeDisplay { get; set; }
+    }
 
-		public DateTimeOffset TimeOfPublication { get; set; }
-	}
+	public class StoryListItemForWriter
+    {
+        public int Id { get; set; }
+        public string CategoryName { get; set; }
+        public string Title { get; set; }
+        public string Location { get; set; }
+        public string DateTimeDisplay { get; set; }
+    }
+
+    public class StoryListItemForCategory
+    {
+        public int Id { get; set; }
+        public string WriterName { get; set; }
+        public string Title { get; set; }
+        public string Location { get; set; }
+        public string DateTimeDisplay { get; set; }
+    }
 }
