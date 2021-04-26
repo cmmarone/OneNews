@@ -10,6 +10,7 @@ using Microsoft.Owin.Security.OAuth;
 using Owin;
 using OneNews.WebAPI.Providers;
 using OneNews.WebAPI.Models;
+using OneNews.Data;
 
 namespace OneNews.WebAPI
 {
