@@ -12,17 +12,13 @@ namespace OneNews.Models
     public class StoryCreate
     {
 		[Required]
-		public int CategoryId { get; set; }
-
+		public string CategoryName { get; set; }
 		[Required]
-		public int WriterId { get; set; }
-
+		public string WriterName { get; set; }
 		[Required]
 		public string Title { get; set; }
-
 		[Required]
 		public string Body { get; set; }
-
 		[Required]
 		public string Location { get; set; }
 	}

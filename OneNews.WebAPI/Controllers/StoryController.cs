@@ -21,7 +21,7 @@ namespace OneNews.WebAPI.Controllers
                 return BadRequest(ModelState);
             if (!_service.CreateStory(model))
                 return InternalServerError();
-            return Ok();
+            return Ok($"The story '{model.Title}' has been published.");
         }
 
         public IHttpActionResult Get()
@@ -42,14 +42,14 @@ namespace OneNews.WebAPI.Controllers
                 return BadRequest(ModelState);
             if (!_service.UpdateStory(model))
                 return InternalServerError();
-            return Ok();
+            return Ok($"The story '{model.Title}' has been updated.");
         }
 
         public IHttpActionResult Delete(int id)
         {
             if (!_service.DeleteStory(id))
                 return InternalServerError();
-            return Ok();
+            return Ok("Story has been deleted.");
         }
     }
 }

@@ -16,8 +16,8 @@ namespace OneNews.Services
         {
             var storyEntity = new Story
             {
-                CategoryId = model.CategoryId,
-                WriterId = model.WriterId,
+                CategoryId = (_context.Categories.Single(c => c.Name.ToLower() == model.CategoryName.ToLower())).Id,
+                WriterId = (_context.Writers.Single(w => w.Name.ToLower() == model.WriterName.ToLower())).Id,
                 Title = model.Title,
                 Body = model.Body,
                 Location = model.Location,
@@ -30,15 +30,15 @@ namespace OneNews.Services
         public IEnumerable<StoryListItem> GetAllStories()
         {
             var storyEntities = _context.Stories.ToList();
-            var storyList = storyEntities.Select(e => new StoryListItem 
+            var storyList = storyEntities.Select(e => new StoryListItem
             {
-                Id = e.Id, 
+                Id = e.Id,
                 CategoryName = (_context.Categories.Single(c => c.Id == e.CategoryId)).Name,
                 WriterName = (_context.Writers.Single(w => w.Id == e.WriterId)).Name,
                 Title = e.Title,
                 Location = e.Location,
-                TimeOfPublication = e.TimeOfPublication
-            }).ToList().OrderBy(s => s.TimeOfPublication);
+                DateTimeDisplay = DisplayDateTime(e.TimeOfPublication)
+            }).ToList().OrderByDescending(s => s.Id);
             return storyList;
         }
 
@@ -53,19 +53,24 @@ namespace OneNews.Services
                 Title = entity.Title,
                 Body = entity.Body,
                 Location = entity.Location,
-                TimeOfPublication = entity.TimeOfPublication
+                DateTimeDisplay = DisplayDateTime(entity.TimeOfPublication)
             };
         }
 
         public bool UpdateStory(StoryEdit model)
         {
             var entity = _context.Stories.Single(e => e.Id == model.Id);
-            entity.CategoryId = model.CategoryId;
-            entity.WriterId = model.WriterId;
-            entity.Title = model.Title;
-            entity.Body = model.Body;
-            entity.Location = model.Location;
-            return _context.SaveChanges() == 1;
+            if (model.CategoryName != null)
+                entity.CategoryId = (_context.Categories.Single(c => c.Name.ToLower() == model.CategoryName.ToLower())).Id;
+            if (model.WriterName != null)
+                entity.WriterId = (_context.Writers.Single(w => w.Name.ToLower() == model.WriterName.ToLower())).Id;
+            if (model.Title != null)
+                entity.Title = model.Title;
+            if (model.Body != null)
+                entity.Body = model.Body;
+            if (model.Location != null)
+                entity.Location = model.Location;
+            return _context.SaveChanges() > 0;
         }
 
         public bool DeleteStory(int id)
@@ -75,16 +80,19 @@ namespace OneNews.Services
             return _context.SaveChanges() == 1;
         }
 
-        //public string GetCategoryNameById(int categoryId)
-        //{
-        //    var categoryEntity = _context.Categories.Single(e => e.Id == categoryId);
-        //    return categoryEntity.Name;
-        //}
-
-        //public string GetWriterNameById(int writerId)
-        //{
-        //    var writerEntity = _context.Writers.Single(e => e.Id == writerId);
-        //    return writerEntity.Name;
-        //}
+        public string DisplayDateTime(DateTimeOffset timeOfPublicaton)
+        {
+            var localDateTime = timeOfPublicaton.ToLocalTime();
+            int standardHour = localDateTime.Hour;
+            string amPm = "am";
+            if ((localDateTime.Hour % 12) > 0)
+            {
+                standardHour = localDateTime.Hour % 12;
+                amPm = "pm";
+            }
+            return $"{localDateTime.DayOfWeek}, " +
+                $"{localDateTime.Month}/{localDateTime.Day}/{localDateTime.Year} " +
+                $"at {standardHour}:{localDateTime.Minute:D2}{amPm}";
+        }
     }
 }
