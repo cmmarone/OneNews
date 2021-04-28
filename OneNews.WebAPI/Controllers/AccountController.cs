@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -373,6 +374,102 @@ namespace OneNews.WebAPI.Controllers
             }
             return Ok();
         }
+
+        /* APIs for admin -- USER ROLE tools --------------------------------------------------------------------------------------------------------------------------*/
+
+        [HttpGet]
+        [Route("admin/GetAllUsers")]
+        [Authorize(Roles = "Admin")]
+        public List<ApplicationUserModel> GetAllUsers()
+        {
+            List<ApplicationUserModel> listOfUserModels = new List<ApplicationUserModel>();
+            using (var context = new ApplicationDbContext())
+            {
+                var userStore = new UserStore<ApplicationUser>(context);
+                var userManager = new UserManager<ApplicationUser>(userStore);
+                var users = userManager.Users.ToList();
+                var userRoleNames = new List<string>();
+
+                foreach (var user in users)
+                {
+                    foreach (var role in user.Roles)
+                    {
+                        userRoleNames.Add(context.Roles.Single(r => r.Id == role.RoleId).Name);
+                    }
+                    ApplicationUserModel userModel = new ApplicationUserModel
+                    {
+                        Id = user.Id,
+                        Email = user.Email,
+                        Roles = userRoleNames
+                    };
+                    listOfUserModels.Add(userModel);
+                }
+            }
+            return listOfUserModels;
+        }
+
+        //[HttpGet]
+        //[Route("admin/GetAllUsers")]
+        //[Authorize(Roles = "Admin")]
+        //public List<ApplicationUserModel> GetAllUsers()
+        //{
+        //    List<ApplicationUserModel> listOfUserModels = new List<ApplicationUserModel>();
+        //    using (var context = new ApplicationDbContext())
+        //    {
+        //        var userStore = new UserStore<ApplicationUser>(context);
+        //        var userManager = new UserManager<ApplicationUser>(userStore);
+
+        //        var users = userManager.Users.ToList();
+        //        //var roles = context.Roles.ToList();
+
+        //        foreach (var user in users)
+        //        {
+        //            ApplicationUserModel userModel = new ApplicationUserModel
+        //            {
+        //                Id = user.Id,
+        //                Email = user.Email,
+        //            };
+
+        //            foreach (var role in user.Roles)
+        //            {
+        //                userModel.Roles.Add(role.RoleId, context.Roles.Where(x => x.Id == role.RoleId).First().Name);
+        //            }
+
+        //            listOfUserModels.Add(userModel);
+        //        }
+        //    }
+        //    return listOfUserModels;
+        //}
+
+        [HttpPost]
+        [Route("admin/AssignRole")]
+        [Authorize(Roles = "Admin")]
+        public IHttpActionResult AssignRole(UserRolePairingModel pairing)
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+                userManager.AddToRole(pairing.Id, pairing.RoleName);
+                context.SaveChanges();
+                return Ok($"Role {pairing.RoleName} has been assigned to User: {pairing.Id}");
+            }
+        }
+
+        [HttpPost]
+        [Route("admin/UnassignRole")]
+        [Authorize(Roles = "Admin")]
+        public IHttpActionResult UnassignRole(UserRolePairingModel pairing)
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+                userManager.RemoveFromRole(pairing.Id, pairing.RoleName);
+                context.SaveChanges();
+                return Ok($"User: {pairing.Id} no longer has role of {pairing.RoleName}.");
+            }
+        }
+
+        /* end user role tools --------------------------------------------------------------------------------------------------------------------------*/
 
         protected override void Dispose(bool disposing)
         {
