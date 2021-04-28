@@ -12,12 +12,7 @@ namespace OneNews.Services
     {
         private readonly ApplicationDbContext _context = new ApplicationDbContext();
 
-        //private readonly Guid _authorId;
-
-        //public WriterService(Guid authorId)
-        //{
-        //    _authorId = authorId;
-        //}
+        
 
         public bool CreateWriter(WriterCreate writer)
         {
@@ -90,7 +85,7 @@ namespace OneNews.Services
 
             var entity =
                 _context.Writers
-                .Single(e => e.Id == model.Id /*&& e.AuthorId == _authorId*/);
+                .Single(e => e.Id == model.Id );
             entity.Name = model.Name;
             entity.Id = model.Id;
 
@@ -105,7 +100,7 @@ namespace OneNews.Services
         {
             var entity =
                 _context.Writers
-                .Single(e => e.Id == Id /*&& e.AuthorId == _authorId*/);
+                .Single(e => e.Id == Id );
             _context.Writers.Remove(entity);
             return _context.SaveChanges() == 1;
         }
