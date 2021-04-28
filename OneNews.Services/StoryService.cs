@@ -86,7 +86,7 @@ namespace OneNews.Services
             return _context.SaveChanges() == 1;
         }
 
-        public string DisplayDateTime(DateTimeOffset timeOfPublicaton)
+        public static string DisplayDateTime(DateTimeOffset timeOfPublicaton)
         {
             var localDateTime = timeOfPublicaton.ToLocalTime();
             int standardHour = localDateTime.Hour;
