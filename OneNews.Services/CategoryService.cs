@@ -61,7 +61,6 @@ namespace OneNews.Services
         public ICollection<StoryListItemForCategory> ConvertStoryBaseModeltoListItem(ICollection<Story> stories)
         {
             var listOfItems = new List<StoryListItemForCategory>();
-            var serviceStory = new StoryService();
             foreach(Story story in stories)
             {
                 var listItem = new StoryListItemForCategory();
@@ -69,7 +68,7 @@ namespace OneNews.Services
                 listItem.WriterName = (_context.Writers.Single(w => w.Id == story.WriterId)).Name;
                 listItem.Title = story.Title;
                 listItem.Location = story.Location;
-                listItem.DateTimeDisplay = serviceStory.DisplayDateTime(story.TimeOfPublication);
+                listItem.DateTimeDisplay = StoryService.DisplayDateTime(story.TimeOfPublication);
                 listOfItems.Add(listItem);
               
             }

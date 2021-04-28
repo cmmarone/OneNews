@@ -67,14 +67,13 @@ namespace OneNews.Services
         public ICollection<StoryListItemForWriter> ConvertStoryToListItemForWriter(ICollection<Story> stories)
         {
             var listOfItems = new List<StoryListItemForWriter>();
-            var serviceStory = new StoryService();
             foreach (Story story in stories)
             {
                var listItem = new StoryListItemForWriter();
                listItem.Id = story.Id;
                listItem.Title = story.Title;
                listItem.Location = story.Location;
-               listItem.DateTimeDisplay = serviceStory.DisplayDateTime(story.TimeOfPublication);
+               listItem.DateTimeDisplay = StoryService.DisplayDateTime(story.TimeOfPublication);
                listItem.CategoryName = (_context.Categories.Single(c => c.Id == story.CategoryId)).Name;
                     
                listOfItems.Add(listItem);
