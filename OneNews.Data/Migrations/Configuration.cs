@@ -1,5 +1,7 @@
 namespace OneNews.Data.Migrations
 {
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -26,6 +28,28 @@ namespace OneNews.Data.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+            if (!roleManager.RoleExists("Admin"))
+                roleManager.Create(new IdentityRole("Admin"));
+            if (!roleManager.RoleExists("Publisher"))
+                roleManager.Create(new IdentityRole("Publisher"));
+
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+
+            if (userManager.FindByEmail("administrator@OneNews.com") == null)
+            {
+                var user = new ApplicationUser
+                {
+                    Email = "administrator@OneNews.com",
+                    UserName = "administrator@OneNews.com"
+                };
+
+                var result = userManager.Create(user, "1NewsAdministrator!");
+
+                if (result.Succeeded)
+                    userManager.AddToRole(userManager.FindByEmail(user.UserName).Id, "Admin");
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using OneNews.Models;
+﻿using Microsoft.AspNet.Identity;
+using OneNews.Models;
 using OneNews.Services;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,13 @@ using System.Web.Http;
 
 namespace OneNews.WebAPI.Controllers
 {
+    [Authorize(Roles = "Admin, Publisher")]
     public class CategoryController : ApiController
     {
         private CategoryService CreateCategoryService()
         {
-            var categotyService = new CategoryService();
+            var authorId = Guid.Parse(User.Identity.GetUserId());
+            var categotyService = new CategoryService(authorId);
             return categotyService;
         }
 
@@ -36,6 +39,7 @@ namespace OneNews.WebAPI.Controllers
             return InternalServerError();
         }
 
+        [AllowAnonymous]
         public IHttpActionResult Get()
         {
             CategoryService categoryService = CreateCategoryService();
@@ -43,6 +47,7 @@ namespace OneNews.WebAPI.Controllers
             return Ok(categories);
         }
 
+        [AllowAnonymous]
         public IHttpActionResult Get(int id)
         {
             CategoryService categoryService = CreateCategoryService();

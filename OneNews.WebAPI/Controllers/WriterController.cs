@@ -1,4 +1,5 @@
-﻿using OneNews.Models;
+﻿using Microsoft.AspNet.Identity;
+using OneNews.Models;
 using OneNews.Services;
 using System;
 using System.Collections.Generic;
@@ -9,12 +10,13 @@ using System.Web.Http;
 
 namespace OneNews.WebAPI.Controllers
 {
+    [Authorize(Roles = "Admin, Publisher")]
     public class WriterController : ApiController
     {
         private WriterService CreateWriterService()
         {
-            
-            var Service = new WriterService();
+            var authorId = Guid.Parse(User.Identity.GetUserId());
+            var Service = new WriterService(authorId);
             return Service;
         }
 
@@ -24,7 +26,6 @@ namespace OneNews.WebAPI.Controllers
             if (writer is null)
             {
                 return BadRequest();
-
             }
             if (!ModelState.IsValid)
             {
@@ -37,9 +38,9 @@ namespace OneNews.WebAPI.Controllers
                 return InternalServerError();
             }
             return Ok("New Writer Created");
-
         }
 
+        [AllowAnonymous]
         public IHttpActionResult Get()
         {
             WriterService writerService = CreateWriterService();
@@ -47,14 +48,13 @@ namespace OneNews.WebAPI.Controllers
             return Ok(writers);
         }
 
+        [AllowAnonymous]
         public IHttpActionResult Get(int id)
         {
             WriterService writerService = CreateWriterService();
             var writer = writerService.GetWriterById(id);
             return Ok(writer);
         }
-
-
 
         public IHttpActionResult Put(WriterEdit writer)
         {

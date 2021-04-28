@@ -12,6 +12,12 @@ namespace OneNews.Services
     {
         private readonly ApplicationDbContext _context = new ApplicationDbContext();
 
+        private readonly Guid _authorId;
+        public StoryService(Guid authorId)
+        {
+            _authorId = authorId;
+        }
+
         public bool CreateStory(StoryCreate model)
         {
             var storyEntity = new Story
@@ -59,7 +65,7 @@ namespace OneNews.Services
 
         public bool UpdateStory(StoryEdit model)
         {
-            var entity = _context.Stories.Single(e => e.Id == model.Id);
+            var entity = _context.Stories.Single(e => e.Id == model.Id && e.AuthorId == _authorId);
             if (model.CategoryName != null)
                 entity.CategoryId = (_context.Categories.Single(c => c.Name.ToLower() == model.CategoryName.ToLower())).Id;
             if (model.WriterName != null)
@@ -75,7 +81,7 @@ namespace OneNews.Services
 
         public bool DeleteStory(int id)
         {
-            var entity = _context.Stories.Single(e => e.Id == id);
+            var entity = _context.Stories.Single(e => e.Id == id && e.AuthorId == _authorId);
             _context.Stories.Remove(entity);
             return _context.SaveChanges() == 1;
         }
