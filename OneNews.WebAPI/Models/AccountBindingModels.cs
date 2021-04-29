@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
@@ -80,5 +81,23 @@ namespace OneNews.WebAPI.Models
         [Display(Name = "Confirm new password")]
         [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+    }
+
+    public class ApplicationUserModel
+    {
+        public string Id { get; set; }
+        public string Email { get; set; }
+        public List<string> Roles { get; set; } = new List<string>();
+    }
+
+    public class UserRolePairingModel
+    {
+        public string Id { get; set; }
+        public string RoleName { get; set; }
+    }
+
+    public class RoleCreateModel
+    {
+        public string RoleName { get; set; }
     }
 }

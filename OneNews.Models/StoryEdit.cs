@@ -8,5 +8,11 @@ namespace OneNews.Models
 {
     public class StoryEdit
     {
-    }
+		public int Id { get; set; }
+		public string CategoryName { get; set; }
+		public string WriterName { get; set; }
+		public string Title { get; set; }
+		public string Body { get; set; }
+		public string Location { get; set; }
+	}
 }
