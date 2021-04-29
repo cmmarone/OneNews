@@ -23,7 +23,8 @@ namespace OneNews.Services
         {
             var category = new Category
             {
-                Name = model.Name
+                Name = model.Name,
+                AuthorId = _authorId
             };
 
             _context.Categories.Add(category);

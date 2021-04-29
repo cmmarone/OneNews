@@ -27,7 +27,8 @@ namespace OneNews.Services
                 Title = model.Title,
                 Body = model.Body,
                 Location = model.Location,
-                TimeOfPublication = DateTimeOffset.Now
+                TimeOfPublication = DateTimeOffset.Now,
+                AuthorId = _authorId
             };
             _context.Stories.Add(storyEntity);
             return _context.SaveChanges() == 1;
