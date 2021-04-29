@@ -385,17 +385,15 @@ namespace OneNews.WebAPI.Controllers
             List<ApplicationUserModel> listOfUserModels = new List<ApplicationUserModel>();
             using (var context = new ApplicationDbContext())
             {
-                var userStore = new UserStore<ApplicationUser>(context);
-                var userManager = new UserManager<ApplicationUser>(userStore);
+                var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
                 var users = userManager.Users.ToList();
                 var userRoleNames = new List<string>();
 
                 foreach (var user in users)
                 {
                     foreach (var role in user.Roles)
-                    {
                         userRoleNames.Add(context.Roles.Single(r => r.Id == role.RoleId).Name);
-                    }
+                    
                     ApplicationUserModel userModel = new ApplicationUserModel
                     {
                         Id = user.Id,
@@ -416,11 +414,9 @@ namespace OneNews.WebAPI.Controllers
         //    List<ApplicationUserModel> listOfUserModels = new List<ApplicationUserModel>();
         //    using (var context = new ApplicationDbContext())
         //    {
-        //        var userStore = new UserStore<ApplicationUser>(context);
-        //        var userManager = new UserManager<ApplicationUser>(userStore);
-
+        //        var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
         //        var users = userManager.Users.ToList();
-        //        //var roles = context.Roles.ToList();
+        //        var roles = context.Roles.ToList();
 
         //        foreach (var user in users)
         //        {
@@ -432,7 +428,7 @@ namespace OneNews.WebAPI.Controllers
 
         //            foreach (var role in user.Roles)
         //            {
-        //                userModel.Roles.Add(role.RoleId, context.Roles.Where(x => x.Id == role.RoleId).First().Name);
+        //                userModel.Roles.Add(roles.Where(x => x.Id == role.RoleId).First().Name);
         //            }
 
         //            listOfUserModels.Add(userModel);
