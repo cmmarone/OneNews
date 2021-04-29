@@ -23,7 +23,8 @@ namespace OneNews.Services
             var entity = new Writer
 
             {
-                Name = writer.Name
+                Name = writer.Name,
+                AuthorId = _authorId
             };
 
 
